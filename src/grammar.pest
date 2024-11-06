@@ -1,0 +1,16 @@
+time = { hour ~ ":" ~ minsec ~ ":" ~ minsec }
+hour = { "0" ~ ASCII_DIGIT | "1" ~ ASCII_DIGIT | "2" ~ '0'..'3' }
+minsec = { '0'..'5' ~ ASCII_DIGIT }
+
+date = { ASCII_DIGIT{4} ~ "-" ~ month ~ "-" ~ ASCII_DIGIT{2} }
+month = { "0" ~ ASCII_NONZERO_DIGIT | "1" ~ '0'..'2' }
+day = { "0" ~ ASCII_NONZERO_DIGIT | '1'..'2' ~ ASCII_DIGIT | "3" ~ '0'..'1' }
+
+datetime = { date ~ " " ~ time }
+
+loglevel = { "INFO" | "WARNING" | "ERROR" }
+message = { (!NEWLINE ~ ANY)+ }
+
+logline = { datetime ~ " " ~ loglevel ~ " " ~ message }
+
+file = { SOI ~ logline* ~ EOI }
