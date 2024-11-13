@@ -35,13 +35,13 @@ log_parser_kma parse -f <file_path> -o <output_path> [options]
 Parse a log file and save output as JSON
 
 ```
-log_parser_kma -f logs.log -o results.txt -j
+log_parser_kma parse -f logs.log -o results.txt -j
 ```
 
 Parse a log file, filter `ERROR` level logs and output as JSON
 
 ```
-log_parser_kma -f newlogs.log -o errorlogs.txt -l ERROR -j
+log_parser_kma parse -f newlogs.log -o errorlogs.txt -l ERROR -j
 ```
 
 ### Help command
@@ -60,4 +60,4 @@ log_parser_kma credits
 
 - **crates.io**: https://crates.io/crates/log_parser_kma
 
-- **docs.rs**: https://docs.rs/log_parser_kma/0.1.2/log_parser_kma
+- **docs.rs**: https://docs.rs/log_parser_kma/0.1.3/log_parser_kma
