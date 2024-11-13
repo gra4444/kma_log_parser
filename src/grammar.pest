@@ -12,5 +12,3 @@ loglevel = { "INFO" | "WARNING" | "ERROR" }
 message = { (!NEWLINE ~ ANY)+ }
 
 logline = { datetime ~ " " ~ loglevel ~ " " ~ message }
-
-file = { SOI ~ logline* ~ EOI }

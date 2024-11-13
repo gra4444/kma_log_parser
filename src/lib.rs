@@ -1,68 +1,79 @@
-// use chrono::NaiveDateTime;
+use chrono::NaiveDateTime;
 pub use pest::Parser;
 use pest_derive::Parser;
-// use thiserror::Error;
+use serde::{Deserialize, Serialize};
+use thiserror::Error;
 
 #[derive(Parser)]
 #[grammar = "./grammar.pest"]
 pub struct LogParser;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum LogLevel {
     Info,
     Warning,
     Error,
 }
 
-// #[derive(Debug, PartialEq)]
-// pub struct LogLine {
-//     pub datetime: NaiveDateTime,
-//     pub level: LogLevel,
-//     pub message: String,
-// }
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct LogLine {
+    pub datetime: NaiveDateTime,
+    pub level: LogLevel,
+    pub message: String,
+}
 
-// #[derive(Debug, Error)]
-// pub enum LogParseError {
-//     #[error("Pest grammar error")]
-//     PestError(pest::error::Error<Rule>),
-//     #[error("Invalid log level")]
-//     InvalidLogLevel,
-//     #[error("Invalid date time provided")]
-//     InvalidDateTime,
-// }
+#[derive(Debug, Error)]
+pub enum LogParseError {
+    #[error("Pest grammar error")]
+    ParseError(Box<pest::error::Error<Rule>>),
+    #[error("Invalid log level")]
+    InvalidLogLevel,
+    #[error("Invalid date time provided")]
+    InvalidDateTime,
+    #[error("Error reading file")]
+    FileError(std::io::Error),
+}
 
-// impl LogLine {
-//     pub fn parse(line: &str) -> Result<LogLine, LogParseError> {
-//         let parse_result = LogParser::parse(Rule::logline, line);
-//         println!("LOG PARSER COMPLETED PARSE");
-//         match parse_result {
-//             Ok(mut pairs) => {
-//                 println!("OK PAIRS");
-//                 let pair = pairs.next().unwrap();
+impl LogParser {
+    pub fn parse_file(path: &str) -> Result<Vec<LogLine>, LogParseError> {
+        let content = std::fs::read_to_string(path).map_err(LogParseError::FileError)?;
 
-//                 let datetime_str = pair.clone().into_inner().next().unwrap().as_str();
-//                 let datetime = NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S")
-//                     .map_err(|_| LogParseError::InvalidDateTime)?;
+        let mut parsed_logs: Vec<LogLine> = Vec::new();
 
-//                 let level_str = pair.clone().into_inner().nth(1).unwrap().as_str();
-//                 let level = match level_str {
-//                     "INFO" => LogLevel::Info,
-//                     "WARNING" => LogLevel::Warning,
-//                     "ERROR" => LogLevel::Error,
-//                     _ => return Err(LogParseError::InvalidLogLevel),
-//                 };
+        for line in content.lines() {
+            match LogLine::parse(line) {
+                Ok(log_line) => parsed_logs.push(log_line),
+                Err(e) => eprintln!("Failed to parse line: {:?}, err: {:?}", line, e),
+            }
+        }
 
-//                 let message = pair.into_inner().last().unwrap().as_str().to_string();
-//                 println!("EVERYTHING PROCESSED");
-//                 Ok(LogLine {
-//                     datetime,
-//                     level,
-//                     message,
-//                 })
-//             }
-//             Err(e) => {
-//                 println!("ERROR OCCURED");
-//                 Err(LogParseError::PestError(e))},
-//         }
-//     }
-// }
+        Ok(parsed_logs)
+    }
+}
+
+impl LogLine {
+    pub fn parse(line: &str) -> Result<LogLine, LogParseError> {
+        let mut parse_result = LogParser::parse(Rule::logline, line)
+            .map_err(|e| LogParseError::ParseError(Box::new(e)))?;
+        let pair = parse_result.next().unwrap();
+
+        let datetime_str = pair.clone().into_inner().next().unwrap().as_str();
+        let datetime = NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S")
+            .map_err(|_| LogParseError::InvalidDateTime)?;
+
+        let level_str = pair.clone().into_inner().nth(1).unwrap().as_str();
+        let level = match level_str {
+            "INFO" => LogLevel::Info,
+            "WARNING" => LogLevel::Warning,
+            "ERROR" => LogLevel::Error,
+            _ => return Err(LogParseError::InvalidLogLevel),
+        };
+
+        let message = pair.into_inner().last().unwrap().as_str().to_string();
+        Ok(LogLine {
+            datetime,
+            level,
+            message,
+        })
+    }
+}
