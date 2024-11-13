@@ -6,35 +6,67 @@ use std::io::Write;
 
 fn main() -> Result<()> {
     let matches = Command::new("Log Parser")
-        .version("0.1")
-        .arg(
-            Arg::new("file")
-                .short('f')
-                .help("The file to parse")
-                .required(true),
+        .version("0.1.2")
+        .subcommand(
+            Command::new("credits")
+                        .about("Displays the credits")
         )
-        .arg(
-            Arg::new("output")
-                .short('o')
-                .help("Path to output file")
-                .required(true),
-        )
-        .arg(
-            Arg::new("level")
-                .short('l')
-                .help("Extract logs of specified level")
-                .required(false),
-        )
-        .arg(
-            Arg::new("to-json")
-                .short('j')
-                .help("Toggle to-JSON conversion")
-                .required(false)
-                .action(clap::ArgAction::SetTrue),
+        .subcommand(
+            Command::new("parse")
+                        .about("Parses a log file with different options")
+                        .arg(
+                            Arg::new("file")
+                                .short('f')
+                                .help("The file to parse")
+                                .required(true),
+                        )
+                        .arg(
+                            Arg::new("output")
+                                .short('o')
+                                .help("Path to output file")
+                                .required(true),
+                        )
+                        .arg(
+                            Arg::new("level")
+                                .short('l')
+                                .help("Extract logs of specified level")
+                                .required(false),
+                        )
+                        .arg(
+                            Arg::new("to-json")
+                                .short('j')
+                                .help("Toggle to-JSON conversion")
+                                .required(false)
+                                .action(clap::ArgAction::SetTrue),
+                        )
         )
         .get_matches();
 
-    process(&matches)?;
+    match matches.subcommand() {
+        Some(("help", _)) => {
+            println!("Log Parser CLI - Help");
+            println!("Usage: log_parser_kma [COMMAND] [OPTIONS]");
+            println!("Commands:");
+            println!("  parse   Parse a log file with various options");
+            println!("  help    Display this help message");
+            println!("  credits Show credits");
+            println!("Use `log_parser_kma --help` for more details on the parse command");
+        },
+        Some(("credits", _)) => {
+            println!("Log Parser");
+            println!("Made by Krachylo Illia");
+            println!("For NaUKMA Rust Programming Course of 2024");
+            println!("Version 0.1.2");
+        },
+        Some(("parse", parse_matches)) => {
+            process(parse_matches)?;
+        },
+        _ => {
+            println!("Unknown command")
+        }
+    }
+
+   
     Ok(())
 }
 

@@ -17,10 +17,10 @@ Logs are parsed in the following format: `Date Time Level Message`.
 
 Log parser can be used via CLI (created using `clap`) with the following options:
 
-### Basic command
+### Parse command
 
 ```
-log_parser_kma -f <file_path> -o <output_path> [options]
+log_parser_kma parse -f <file_path> -o <output_path> [options]
 ```
 
 ### Options
@@ -42,6 +42,18 @@ Parse a log file, filter `ERROR` level logs and output as JSON
 
 ```
 log_parser_kma -f newlogs.log -o errorlogs.txt -l ERROR -j
+```
+
+### Help command
+
+```
+log_parser_kma help
+```
+
+### Credits command
+
+```
+log_parser_kma credits
 ```
 
 ## Published on
