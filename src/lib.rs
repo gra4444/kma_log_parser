@@ -1,3 +1,5 @@
+#![doc = include_str!("../docs.md")]
+
 use chrono::NaiveDateTime;
 pub use pest::Parser;
 use pest_derive::Parser;
