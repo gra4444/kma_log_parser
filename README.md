@@ -43,3 +43,13 @@ Parse a log file, filter `ERROR` level logs and output as JSON
 ```
 log_parser_kma -f newlogs.log -o errorlogs.txt -l ERROR -j
 ```
+
+## Published on
+
+- **crates.io**: https://crates.io/crates/log_parser_kma
+
+- **docs.rs**: 
+
+  - https://docs.rs/log_parser_kma/0.1.0/log_parser_kma
+
+  - https://docs.rs/crate/log_parser_kma/0.1.0
