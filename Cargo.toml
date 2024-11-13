@@ -1,6 +1,6 @@
 [package]
 name = "log_parser_kma"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 license = "MIT"
 description = "Rust-based log file parser, helping extract datetime, log levels and messages"
@@ -8,7 +8,7 @@ description = "Rust-based log file parser, helping extract datetime, log levels 
 [dependencies]
 anyhow = "1.0.93"
 chrono = { version = "0.4.38", features = ["serde"] }
-clap = "4.5.20"
+clap = "4.5.21"
 pest = "2.7.14"
 pest_derive = "2.7.14"
 serde = { version = "1.0.215", features = ["derive"] }
