@@ -168,7 +168,7 @@ mod tests {
     }
 
     #[test]
-    fn test() -> Result<()> {
+    fn test_logline_parse() -> Result<()> {
         let test_line = "2024-11-06 22:22:00 ERROR Test error message";
         let expected = LogLine {
             datetime: NaiveDate::from_ymd_opt(2024, 11, 6)
@@ -180,6 +180,25 @@ mod tests {
         };
         let actual = LogLine::parse(test_line).unwrap();
         assert_eq!(expected, actual);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_parse_file() -> Result<()> {
+        let result = LogParser::parse_file("tests/resources/test.log")?;
+        assert_eq!(4, result.len());
+
+        let expected_log1 = LogLine {
+            datetime: NaiveDate::from_ymd_opt(2024, 11, 6)
+                .unwrap()
+                .and_hms_opt(18, 46, 31)
+                .unwrap(),
+            level: LogLevel::Info,
+            message: String::from("some info message"),
+        };
+
+        assert_eq!(&expected_log1, result.get(0).unwrap());
 
         Ok(())
     }

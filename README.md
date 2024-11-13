@@ -13,5 +13,33 @@ Logs are parsed in the following format: `Date Time Level Message`.
 - **Level** - one of three (currently) logging levels: `INFO`, `WARNING`, `ERROR`.
 - **Message** - message of the log line.
 
-## Usage
+## CLI Usage
 
+Log parser can be used via CLI (created using `clap`) with the following options:
+
+### Basic command
+
+```
+log_parser_kma -f <file_path> -o <output_path> [options]
+```
+
+### Options
+
+- `-f, --file <file_path>` - specifies the path to the log file to be parsed. **(Required)**
+- `-o, --output <output_path>` - specifies the path to the output file. **(Required)**
+- `-l, --level <log_level>` - specifies log level to filter by (`INFO`, `WARNING` or `ERROR`). **(Optional)**
+- `-j, --to-json` - outputs the logs in JSON format instead of plain text. **(Optional)**
+
+### Examples
+
+Parse a log file and save output as JSON
+
+```
+log_parser_kma -f logs.log -o results.txt -j
+```
+
+Parse a log file, filter `ERROR` level logs and output as JSON
+
+```
+log_parser_kma -f newlogs.log -o errorlogs.txt -l ERROR -j
+```

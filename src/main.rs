@@ -14,16 +14,16 @@ fn main() -> Result<()> {
                 .required(true),
         )
         .arg(
-            Arg::new("level")
-                .short('l')
-                .help("Extract logs of specified level")
-                .required(false),
-        )
-        .arg(
             Arg::new("output")
                 .short('o')
                 .help("Path to output file")
                 .required(true),
+        )
+        .arg(
+            Arg::new("level")
+                .short('l')
+                .help("Extract logs of specified level")
+                .required(false),
         )
         .arg(
             Arg::new("to-json")
