@@ -60,4 +60,4 @@ log_parser_kma credits
 
 - **crates.io**: https://crates.io/crates/log_parser_kma
 
-- **docs.rs**: https://docs.rs/log_parser_kma/0.1.1/log_parser_kma
+- **docs.rs**: https://docs.rs/log_parser_kma/0.1.2/log_parser_kma
