@@ -6,10 +6,13 @@ Log Parser can be used to extract logs with specified log `level` into another f
 
 ## Format
 
-Logs are parsed in the following format: `Date Time Level Message`.
+Logs are parsed in the following format: `Datetime Level Message`.
 
-- **Date** - date specified in `YYYY-MM-DD` format, e.g. `2024-11-07`.
-- **Time** - time specified in `HH:MM:SS` format, e.g. `15:41:07`.
+![Log line diagram](assets/logline_diagram.png)
+
+- **Datetime** constists of `date` and `time`:
+  - **Date** - date specified in `YYYY-MM-DD` format, e.g. `2024-11-07`.
+  - **Time** - time specified in `HH:MM:SS` format, e.g. `15:41:07`.
 - **Level** - one of three (currently) logging levels: `INFO`, `WARNING`, `ERROR`.
 - **Message** - message of the log line.
 
